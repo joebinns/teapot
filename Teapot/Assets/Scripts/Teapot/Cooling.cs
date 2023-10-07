@@ -1,12 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Temperature))]
 public class Cooling : MonoBehaviour
 {
-    private float _roomTemp = 25f;
-    
     private Temperature _temperature;
     
     private void Awake()
@@ -16,7 +12,7 @@ public class Cooling : MonoBehaviour
     
     private void TendToRoom()
     {
-        var tempDiff = (_temperature.Temp - _roomTemp);
+        var tempDiff = (_temperature.Temp - ThermodynamicsManager.Instance.Settings.RoomTemperature);
         _temperature.Temp -= tempDiff * Time.deltaTime * 0.5f;
     }
 

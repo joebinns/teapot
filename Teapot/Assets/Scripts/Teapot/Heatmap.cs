@@ -1,27 +1,24 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
-[RequireComponent(typeof(Temperature))]
+[RequireComponent(typeof(Temperature), typeof(Renderer))]
 public class Heatmap : MonoBehaviour
 {
-    [SerializeField] private Texture2D _heatmap;
-
     private Temperature _temperature;
+    private Renderer _renderer;
     
     private void Awake()
     {
         _temperature = GetComponent<Temperature>();
+        _renderer = GetComponent<Renderer>();
     }
     
     private void UpdateColour()
     {
         var tempPercent = Mathf.Clamp01(_temperature.Temp / 150f); // Divide by whatever the max temp is approximately... (Should max temp be a hard limit?)
-        var pixelPos = tempPercent * (_heatmap.width - 1);
-        var colour = _heatmap.GetPixel((int)pixelPos, 0);
-        GetComponent<Renderer>().material.color = colour;
+        var heatmap = ThermodynamicsManager.Instance.Settings.Heatmap;
+        var pixelPos = tempPercent * (heatmap.width - 1);
+        var colour = heatmap.GetPixel((int)pixelPos, 0);
+        _renderer.material.color = colour;
     }
 
     private void Update()

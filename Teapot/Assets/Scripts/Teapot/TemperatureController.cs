@@ -1,8 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Temperature))]
+[RequireComponent(typeof(Temperature), typeof(Stove))]
 public class TemperatureController : MonoBehaviour
 {
     // TODO: Should I make this a subclass of Temperature?
@@ -13,12 +11,9 @@ public class TemperatureController : MonoBehaviour
     {
         _temperature = GetComponent<Temperature>();
         
-        var Stove = GetComponent<Stove>();
-        if (Stove != null)
-        {
-            Stove.Light += ToggleHeating;
-            Stove.Extinguish += ToggleHeating;
-        }
+        var stove = GetComponent<Stove>();
+        stove.Light += ToggleHeating;
+        stove.Extinguish += ToggleHeating;
     }
 
     private bool _isHeating = false;
