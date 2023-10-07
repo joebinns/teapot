@@ -3,8 +3,10 @@ using UnityEngine;
 [RequireComponent(typeof(Temperature))]
 public class Emitter : MonoBehaviour
 {
+    [SerializeField] private float _radiusFactor = 1f;
+    [SerializeField] private float _emissivity = 1f;
+    
     private Collider[] _nearbyColliders;
-
     private Temperature _temperature;
     
     private void Awake()
@@ -15,12 +17,12 @@ public class Emitter : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.green;
-        Gizmos.DrawWireSphere(transform.position, transform.lossyScale.magnitude * 1f);
+        Gizmos.DrawWireSphere(transform.position, transform.lossyScale.magnitude * _radiusFactor);
     }
 
     private void EmitHeat()
     {
-        _nearbyColliders = Physics.OverlapSphere(transform.position, transform.lossyScale.magnitude * 1f);
+        _nearbyColliders = Physics.OverlapSphere(transform.position, transform.lossyScale.magnitude * _radiusFactor);
 
         foreach (Collider nearbyCollider in _nearbyColliders)
         {
@@ -39,7 +41,7 @@ public class Emitter : MonoBehaviour
                 var distance = Vector3.Distance(transform.position, nearbyCollider.transform.position);
                 
                 // Heat up the nearby object
-                nearbyTemperature.Temp += tempDiff * Time.deltaTime * Mathf.Pow(distance, -2) * 1f;
+                nearbyTemperature.Temp += tempDiff * Time.deltaTime * Mathf.Pow(distance, -2) * _emissivity;
             }
         }
     }
